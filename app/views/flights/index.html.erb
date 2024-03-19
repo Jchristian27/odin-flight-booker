@@ -1,1 +1,20 @@
-<h1>Flights will show up here</h1>
+<h1>Book a Flight</h1>
+
+<% @airport_options = Airport.all.map { |a| a.code } %>
+<% @dates = Flight.all.map{|f| f.departure_date.strftime("%m/%d/%Y")}.uniq.sort %>
+
+<%= form_with url: root_path, method: :get do |f| %>
+  <%= f.label :departure_airport, "Departure Airport" %><br>
+  <%= f.select(:departure_airport, @airport_options)%><br>
+  <br>
+  <%= f.label :arrival_airport, "Arrival Airport" %><br>
+  <%= f.select(:arrival_airport, @airport_options.reverse)%><br>
+  <br>
+  <%= f.label :departure_date, "Departure Date" %><br>
+  <%= f.select(:departure_date, @dates) %><br>
+  <br>
+  <%= f.label :num_passengers, "Number of Passengers" %><br>
+  <%= f.select(:passengers, 1..4) %><br>
+  <br>
+  <%= f.submit "Search Flights" %>
+<% end %>
