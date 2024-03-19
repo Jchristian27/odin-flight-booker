@@ -13,8 +13,33 @@
   <%= f.label :departure_date, "Departure Date" %><br>
   <%= f.select(:departure_date, @dates) %><br>
   <br>
-  <%= f.label :num_passengers, "Number of Passengers" %><br>
+  <%= f.label :passengers, "Number of Passengers" %><br>
   <%= f.select(:passengers, 1..4) %><br>
   <br>
   <%= f.submit "Search Flights" %>
+<% end %>
+
+<% if params[:departure_airport] && params[:arrival_airport] %>
+
+  <br>
+  <hr style="border: none; height: 1px; background-color: #000;">
+  <br>
+
+  <% @departure_airport_id = Airport.find_by(code: params[:departure_airport]).id%>
+  <% @arrival_airport_id = Airport.find_by(code: params[:arrival_airport]).id%>
+  <% @formatted_date = Date.strptime(params[:departure_date], "%m/%d/%Y").strftime("%Y-%m-%d")%>
+
+  <% @matching_flights = Flight.where("departure_airport_id = ?", @departure_airport_id)
+                                .where("arrival_airport_id = ?", @arrival_airport_id)
+                                .where("strftime('%Y-%m-%d', departure_date) LIKE ?", "%#{@formatted_date}%")%>
+
+  <%= form_with url: root_path, method: :get do |f| %>
+    <%= f.hidden_field :passengers, value: params[:passengers] %>
+    <% @matching_flights.each do |flight| %>
+      <%= f.radio_button :flight_id, flight.id %>
+      <%= label_tag "Flight ##{flight.id} | Departure: #{flight.departure_airport.code} | Arrival: #{flight.arrival_airport.code} | Depature Time #{flight.departure_date.strftime('%l:%M%p')} | Duration: #{flight.flight_duration} mins" %><br>
+    <% end %>
+    <br>
+    <%= f.submit "Book Flight" %>
+  <% end %>
 <% end %>
