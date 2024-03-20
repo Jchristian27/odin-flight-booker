@@ -33,7 +33,7 @@
                                 .where("arrival_airport_id = ?", @arrival_airport_id)
                                 .where("strftime('%Y-%m-%d', departure_date) LIKE ?", "%#{@formatted_date}%")%>
 
-  <%= form_with url: root_path, method: :get do |f| %>
+  <%= form_with url: new_booking_path, method: :get do |f| %>
     <%= f.hidden_field :passengers, value: params[:passengers] %>
     <% @matching_flights.each do |flight| %>
       <%= f.radio_button :flight_id, flight.id %>

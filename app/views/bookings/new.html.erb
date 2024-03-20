@@ -1,0 +1,31 @@
+<h1>New Booking</h1>
+
+<p>Date: <%= @flight.departure_date.strftime("%m/%d/%Y") %></p>
+<p>Time: <%= @flight.departure_date.strftime('%l:%M %p') %></p>
+<p>Route: <%= Airport.find(@flight.departure_airport_id).code %> to 
+         <%= Airport.find(@flight.arrival_airport_id).code %></p>
+<p>Duration: <%= @flight.flight_duration %> minutes</p>
+<p>Flight ID: <%= @flight.id %></p>
+
+<br>
+<hr style="border: none; height: 1px; background-color: #000;">
+<br>
+
+<h1>Passenger Info</h1>
+
+<%= form_with model: @booking do |f| %>
+  <%= f.hidden_field :flight_id, value: params[:flight_id] %>
+  <% @booking.passengers.each_with_index do |passenger, index| %>
+      <h2>Passenger <%= index + 1 %></h2>
+      <%= f.fields_for :passengers, passenger do |passenger_fields| %>
+        <%= passenger_fields.label :name %>
+        <%= passenger_fields.text_field :name %><br>   
+        <br>     
+        <%= passenger_fields.label :email %>
+        <%= passenger_fields.text_field :email %><br>
+        <br>
+      <% end %>
+  <% end %>
+  <br>
+  <%= f.submit "Submit" %>
+<% end %>
