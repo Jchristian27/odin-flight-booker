@@ -24,8 +24,18 @@
         <%= passenger_fields.label :email %>
         <%= passenger_fields.text_field :email %><br>
         <br>
+        <template>
+        <%= passenger_fields.label :name %>
+        <%= passenger_fields.text_field :name %><br>   
+        <br>     
+        <%= passenger_fields.label :email %>
+        <%= passenger_fields.text_field :email %><br>
+        <br>
+      </template>
       <% end %>
   <% end %>
+  <button>Add Passenger</button>
+  <br>
   <br>
   <%= f.submit "Submit" %>
 <% end %>
